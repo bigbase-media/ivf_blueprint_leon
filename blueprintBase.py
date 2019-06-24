@@ -205,7 +205,7 @@ class CBlueprintBase():
         return
 
     @staticmethod
-    def get_elementType_fromValue(self, elementValue):
+    def get_elementType_fromValue(elementValue):
         nameExt = os.path.splitext(elementValue)
         extLower = nameExt[1].lower()
         if (extLower in BPConfig.g_gifType_list):
@@ -217,9 +217,9 @@ class CBlueprintBase():
         else:
             raise Exception("不支持的文件类型")
 
-def make_Video(BPClass, *args):
+def make_Video(BPClass, *args, **kwargs):
     print("args : ", args)
-    baseUElement = BPClass(*args)
+    baseUElement = BPClass(*args, **kwargs)
     bpDict = baseUElement.run()
     print(bpDict)
     baseUElement.blueprint_2_video()
