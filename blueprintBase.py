@@ -286,6 +286,8 @@ class CSample(CBlueprintBase):
             elementDict['source'] = "user"
             elementDict['type'] = "video"
             elementDict['value'] = self.getResource("element", configDict, subType="video")
+            elementDict['vision'] = dict()
+            elementDict['vision']['alpha'] = self.getResource('alpha', configDict, subType='video')
             self._elements.append(elementDict)
         return
 
@@ -293,6 +295,7 @@ class CSample(CBlueprintBase):
         self._resource['##bgmusic'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/duopai/jiezoubg.mp3"
         self._resource['##ELEMENT-effect-video'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_4.mp4"
         self._resource['##TRACK-effect'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/duopai/track/t1.txt"
+        self._resource['##ALPHA-effect-video'] = 'https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/shanshui3/juanzhou_alpha_hei.mp4'
 
 
 def main():

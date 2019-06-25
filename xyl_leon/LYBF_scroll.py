@@ -5,6 +5,9 @@ sys.path.append("../")
 from blueprintBase import CBlueprintBase, MyException
 import outputDesc
 
+g_Input = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_4.mp4"
+g_Output = "http://test-v.oss-cn-shanghai.aliyuncs.com/hypnos-blueprint/output-11094-016601.mp4"
+
 class CLYBF_Scroll(CBlueprintBase):
     def __init__(self, userVideo, videoDuration):
         super(CLYBF_Scroll, self).__init__("lybf-scroll")
@@ -22,6 +25,7 @@ class CLYBF_Scroll(CBlueprintBase):
         self._outputDesc = outputDesc.create(width, height, outputLocation, outputAlphaLocation, fps, duration, bgColor)
 
     def init_level(self):
+
         configDict = dict()
         configDict['id'] = 0
         configDict['name'] = "scroll"
@@ -42,6 +46,7 @@ class CLYBF_Scroll(CBlueprintBase):
         configDict['newelement_func'] = self.newelement_userVideo_Func
         configDict['baseTime'] = 0
         self._levelConfigs.append(configDict)
+
 
     def newLevel_scroll_Func(self, configDict):
         levelName = configDict['name']
@@ -81,8 +86,8 @@ class CLYBF_Scroll(CBlueprintBase):
             "element": configDict['elementNames'],
             "startTime": times[0][0],
             "endTime": times[0][1],
-            "startPos": "0.2,0.2,0.8,0.8",
-            "endPos": "0.2,0.2,0.8,0.8"
+            "startPos": "0.139,0.138,0.853,0.859",
+            "endPos": "0.139,0.138,0.853,0.859"
         }
 
         level = self.create_level_from_action(baseActionDict, configDict, times, element=configDict['elementNames'])
@@ -97,12 +102,16 @@ class CLYBF_Scroll(CBlueprintBase):
             elementDict['source'] = "user"
             elementDict['type'] = "video"
             elementDict['value'] = self._userVideo
+            visionDict = dict()
+            visionDict['alpha'] = self.getResource("alpha", configDict, subType="video")
+            elementDict['vision'] = visionDict
             self._elements.append(elementDict)
         return
 
     def fill_resource(self):
-        self._resource['##ALPHA-scroll-video'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/shanshui3/scroll_alpha.mp4"
-        self._resource['##ELEMENT-scroll-video'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/shanshui3/scroll_fg.mp4"
+        self._resource['##ALPHA-scroll-video'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/shanshui3/jz_alpha2.mp4"
+        self._resource['##ELEMENT-scroll-video'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/shanshui3/juanzhou.mp4"
+        self._resource['##ALPHA-userVideo-video'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/shanshui3/juanzhou_alpha.mp4"
 
 
 def make_scrollVideo(userVideo, videoDuration):
@@ -115,11 +124,11 @@ def make_scrollVideo(userVideo, videoDuration):
 
 def main():
     userVideo = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_4.mp4"
-    videoDuration = 20000
+    videoDuration = 7000
 
     scrollVideo = make_scrollVideo(userVideo, videoDuration)
-    newVideo = make_scrollVideo(scrollVideo, videoDuration)
-    print(newVideo)
+    # newVideo = make_scrollVideo(scrollVideo, videoDuration)
+    # print(newVideo)
 
 
 if __name__=="__main__":

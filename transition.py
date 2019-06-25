@@ -3,7 +3,7 @@
 import random
 
 g_legalTransitionList = ["t2d2lines",  "t2ddropsquare",  "t2drotate",  "t2dstripe", "t2dtriangle",
-                         "t2dboard", "t2drectangle", "t2dsquare", "t2dtrapezoid", "t2dwave"]
+                         "t2dboard", "t2drectangle", "t2dsquare", "t2dtrapezoid", "t2dwave", "t2Triangle"]
 
 def create(value, next, type="normal2d", legalList=g_legalTransitionList):
     transitionDict = dict()
