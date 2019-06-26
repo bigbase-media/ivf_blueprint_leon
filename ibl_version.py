@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-version = "v0.03"
+version = "v0.03a"

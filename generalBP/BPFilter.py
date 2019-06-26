@@ -4,28 +4,27 @@ import os
 
 sys.path.append("../")
 from blueprintBase import CBlueprintBase, make_Video
-import outputDesc
+import outputDesc, IBL_utils, BPConfig
 
 
-class BPFilter(CBlueprintBase):
+class CBPFilter(CBlueprintBase):
 
     # input: https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_7.mp4
     # output: http://test-v.oss-cn-shanghai.aliyuncs.com/hypnos-blueprint/output-8535-468735.mp4
-    def __init__(self, user_element, width=720, height=1280,
-                 element_duration=None, ele_filter=None, action_configDict=None, element_configDict=None):
-        super(BPFilter, self).__init__("shake")
-        self._width = width
-        self._height = height
-        self._ele_filter = ele_filter
-        self._user_element = user_element
-        self._action_configDict = action_configDict
-        self._element_configDict = element_configDict
-        self._elemnet_duration = element_duration if element_duration else 3000
-        self._element_type = self.get_elementType_fromValue(user_element)
+    def __init__(self, userElement, videoDuration, configDict=dict()):
+        super(CBPFilter, self).__init__("Filter")
+        self._width = configDict.get('width', 720)
+        self._height = configDict.get('height', 1280)
+        self._ele_filter = configDict.get('Filter_type', "random")
+        if (self._ele_filter=="random"):
+            self._ele_filter = IBL_utils.get_random(BPConfig.g_legal_filterType)
+        self._user_element = userElement
+        self._elemnet_duration = videoDuration
+        self._element_type = self.get_elementType_fromValue(userElement)
 
     def init_outputDesc(self):
         outputLocation = "*"
-        outputAlphaLocation = ".avi"
+        outputAlphaLocation = "*"
         fps = 25.0
         duration = self._elemnet_duration
         bgColor = "RGBA(0,0,0,255)"
@@ -60,17 +59,11 @@ class BPFilter(CBlueprintBase):
         kwargs = {
             'element': configDict['elementNames']
         }
-        if self._action_configDict:
-            baseActionDict.update(self._action_configDict)
         level = self.create_level_from_action(baseActionDict, configDict, times, **kwargs)
         return level
 
     def newelement_shake_Func(self, configDict):
         names = configDict['elementNames']
-        video_prop = {
-            "startTime": 0,
-            "endTime": self._elemnet_duration
-        }
         for i, name in enumerate(names):
             element = {
                 'name': name,
@@ -78,20 +71,17 @@ class BPFilter(CBlueprintBase):
                 'type': self._element_type,
                 'value': self._user_element
             }
-            if self._element_configDict:
-                element.update(self._element_configDict)
             if self._ele_filter:
                 element.update({'filter': self._ele_filter})
-            if self._element_type == "video":
-                element.update(video_prop)
             self._elements.append(element)
 
 
 def test_effect():
     userVideo = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_7.mp4"
     videoDuration = 3000
-
-    rotateVideo = make_Video(BPFilter, userVideo, element_duration=videoDuration, ele_filter='blackwhite')
+    configDict = dict()
+    configDict['Filter_type'] = 'random'
+    rotateVideo = make_Video(CBPFilter, userVideo, videoDuration, configDict)
     print(rotateVideo)
 
 
