@@ -13,13 +13,14 @@ demoOutput = "http://test-v.oss-cn-shanghai.aliyuncs.com/hypnos-blueprint/output
 
 
 class CBPEffectRotate(CBlueprintBase):
-    def __init__(self, userVideo, videoDuration, axis, width=720, height=1280):
-        super(CBPEffectRotate, self).__init__("general-Effect")
+    def __init__(self, userVideo, videoDuration, configDict=dict()):
+        super(CBPEffectRotate, self).__init__("Rotate")
         self._userVideo = userVideo
         self._videoDuration = videoDuration
-        self._axis = axis
-        self._width = width
-        self._height = height
+        self._configDict = configDict
+        self._axis = configDict.get('Rotate_axis', 'x')
+        self._width = configDict.get('width', 720)
+        self._height = configDict.get('height', 1280)
 
     def init_outputDesc(self):
         width = self._width
@@ -78,7 +79,10 @@ class CBPEffectRotate(CBlueprintBase):
         pass
 
 def make_rotateVideo(userVideo, videoDuration, axis):
-    rotateUElement = CBPEffectRotate(userVideo, videoDuration, axis)
+    configDict = dict()
+    configDict['axis'] = axis
+
+    rotateUElement = CBPEffectRotate(userVideo, videoDuration, configDict)
     bpDict = rotateUElement.run()
     print(bpDict)
     rotateUElement.blueprint_2_video()
@@ -88,7 +92,9 @@ def make_rotateVideo(userVideo, videoDuration, axis):
     return outputDict
 
 def make_rotateVideo_asyn(userVideo, videoDuration, axis):
-    t = BPThread(make_rotateVideo, userVideo, videoDuration, axis)
+    configDict = dict()
+    configDict['Rotate_axis'] = axis
+    t = BPThread(make_rotateVideo, userVideo, videoDuration, configDict)
     t.setDaemon(True)
     t.start()
     return t

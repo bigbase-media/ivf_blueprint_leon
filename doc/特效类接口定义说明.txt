@@ -1,0 +1,11 @@
+
+1. 接口入参一共就三个：
+    def __init__(self, userVideo, videoDuration, configDict=dict())
+    userElement：表示输入的素材，即将增加特效
+    videoDuration：表示输出视频的时长，单位是毫秒
+    configDict：是个字典类型，特效类的配置参数都在这里输入
+
+
+2. configDict 定义规则：
+    a. 通用参数，不用加任何前缀和后缀，直接表示意思，如：width、height 等
+    b. 特定特效的参数，则需要加前缀，比如 旋转特效的axis，会定义为： Rotate_axis ，中间用下划线隔开，而特效名取自IVF_pipeline 中的定义
