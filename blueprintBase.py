@@ -85,7 +85,7 @@ class CBlueprintBase():
         pass
 
     def check_elements(self):
-        bgmusicName = self.getResource("audio", None)
+        bgmusicName = BPConfig.g_bgmusic_resourceName
         if (self._resource.get(bgmusicName, None) is None):
             warnings.warn("似乎没有设置背景音乐吧")
         else:
@@ -108,6 +108,7 @@ class CBlueprintBase():
     def check_resource(self):
         namelist = list(self._resourceNameSet)
         for name in namelist:
+            print(name)
             value = self._resource.get(name, None)
             if (value is None):
                 raise MyException("resource %s 没定义" % name, "请在self._resource 中设置 %s 的值" % name)

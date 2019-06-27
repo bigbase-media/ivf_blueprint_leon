@@ -50,6 +50,10 @@ class CMerger(CBlueprintBase):
         self._levelConfigs.append(configDict)
 
     def fill_resource(self):
+        if (self._bgmusic is not None):
+            self._resource[
+                BPConfig.g_bgmusic_resourceName] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/duopai/jiezoubg.mp3"
+            print("set bgmusic")
         return
 
     def newLevel_userVideo_Func(self, configDict):
@@ -82,7 +86,7 @@ class CMerger(CBlueprintBase):
             elementDict = dict()
             elementDict['name'] = name
             elementDict['source'] = "user"
-            elementDict['type'] = self.get_elementType_fromValue(self._userInputs)
+            elementDict['type'] = self.get_elementType_fromValue(self._userInputs[i])
             elementDict['value'] = self._userInputs[i]
             self._elements.append(elementDict)
         return

@@ -22,11 +22,21 @@ def IVF_pipeline(inputElement, duration, effect_list, effectConfig):
         outputVideo = outputDict['outputVideo']
     return outputVideo
 
+# 异步实现，适合有多个素材需要处理的场景
+def IVF_pipeline_asyn(inputElement, duration, effect_list, effectConfig):
+    t = BPThread.BPThread(IVF_pipeline, duration, effect_list, effectConfig)
+    t.setDaemon(True)
+    t.start()
+    return t
+
+def IVF_pipeline_asyn_join(t):
+    return t.join()
+
 ####   TEST PROGRAM
 def test():
     inputElement = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_hp_4.mp4"
     duration = 3000
-    effect_list = ['DarkCorner', 'Rotate']
+    effect_list = ['DarkCorner', 'Filter']
     effectConfig = dict()
     outputVideo = IVF_pipeline(inputElement, duration, effect_list, effectConfig)
     print(outputVideo)
