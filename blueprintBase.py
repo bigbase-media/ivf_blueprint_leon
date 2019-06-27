@@ -73,6 +73,10 @@ class CBlueprintBase():
         return name
 
     @abstractmethod
+    def preprocess_userInput(self):
+        pass
+
+    @abstractmethod
     def init_outputDesc(self):
         pass
 
@@ -108,7 +112,6 @@ class CBlueprintBase():
     def check_resource(self):
         namelist = list(self._resourceNameSet)
         for name in namelist:
-            print(name)
             value = self._resource.get(name, None)
             if (value is None):
                 raise MyException("resource %s 没定义" % name, "请在self._resource 中设置 %s 的值" % name)
@@ -127,13 +130,15 @@ class CBlueprintBase():
             self._actionLevels.append(level)
             eleFunc = configDict['newelement_func']
             eleFunc(configDict)
-        print(self._actionLevels)
+        # print(self._actionLevels)
 
     def init_bpDesc(self, **kwargs):
         self._bpDesc.update(kwargs)
         return 'ok'
 
     def run(self):
+        if (self.preprocess_userInput is not None):
+            self.preprocess_userInput()
         self.init_outputDesc()
         self.make_actionLevels()
         if (len(self._actionLevels)==0):

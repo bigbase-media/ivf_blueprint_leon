@@ -3,7 +3,7 @@
 import sys
 sys.path.append("../")
 from blueprintBase import *
-import transition
+import transition, IVF_pipeline
 
 class CMerger(CBlueprintBase):
     def __init__(self, userInputs, sliceDuration, width=720, height=1280, configDict=None):
@@ -17,8 +17,21 @@ class CMerger(CBlueprintBase):
             self._configDict = dict()
         self._bgmusic = self._configDict.get("bgmusic", None)
         self._bgPic = self._configDict.get("bgPic", None)
-        self._transitionFlag = self._configDict.get("transitionFlag", 0)
-        self._effectList = self._configDict.get("effects", [])
+        self._transitionFlag = self._configDict.get("Merger_transitionFlag", 0)
+        self._effectList = self._configDict.get("Merger_effects", [])
+
+    def preprocess_userInput(self):
+        print(sys._getframe().f_code.co_name)
+        if (len(self._effectList)==0):
+            return
+        threads = []
+        for input in self._userInputs:
+            t = IVF_pipeline.IVF_pipeline_asyn(input, self._sliceDuration, self._effectList, dict())
+            threads.append(t)
+        self._userInputs = []
+        for t in threads:
+            output = t.join()
+            self._userInputs.append(output)
 
     def init_outputDesc(self):
         width = self._width
@@ -52,8 +65,7 @@ class CMerger(CBlueprintBase):
     def fill_resource(self):
         if (self._bgmusic is not None):
             self._resource[
-                BPConfig.g_bgmusic_resourceName] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/duopai/jiezoubg.mp3"
-            print("set bgmusic")
+                BPConfig.g_bgmusic_resourceName] = self._bgmusic
         return
 
     def newLevel_userVideo_Func(self, configDict):
@@ -90,6 +102,7 @@ class CMerger(CBlueprintBase):
             elementDict = dict()
             elementDict['name'] = name
             elementDict['source'] = "user"
+            print(self._userInputs[i])
             elementDict['type'] = self.get_elementType_fromValue(self._userInputs[i])
             elementDict['value'] = self._userInputs[i]
             self._elements.append(elementDict)
@@ -137,6 +150,10 @@ class CMerger(CBlueprintBase):
 def mergeElements(userInputs, sliceDuration, bgPic=None):
     configDict = dict()
     configDict['bgPic'] = bgPic
+    configDict['bgmusic'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/dior/diorCopy.aac"
+    #"https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/duopai/jiezoubg.mp3"
+    configDict['Merger_transitionFlag'] = 1
+    configDict['Merger_effects'] = ['Filter']
     merger = CMerger(userInputs, sliceDuration, configDict=configDict)
     bpDict = merger.run()
     print(bpDict)

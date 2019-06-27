@@ -24,7 +24,7 @@ def IVF_pipeline(inputElement, duration, effect_list, effectConfig):
 
 # 异步实现，适合有多个素材需要处理的场景
 def IVF_pipeline_asyn(inputElement, duration, effect_list, effectConfig):
-    t = BPThread.BPThread(IVF_pipeline, duration, effect_list, effectConfig)
+    t = BPThread.BPThread(IVF_pipeline, inputElement, duration, effect_list, effectConfig)
     t.setDaemon(True)
     t.start()
     return t
