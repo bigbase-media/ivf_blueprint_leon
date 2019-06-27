@@ -42,10 +42,12 @@ class CBlueprintBase():
         self._resAlphaFormat1 = "##ALPHA-{}-{}-{}"
 
     def getResource(self, type, levelConfigDict, elementID=None, actionID=None, subType=None):
-        legalTypes = ['track', "element", "alpha"]
+        legalTypes = ['track', "element", "alpha", 'audio']
         if (type not in legalTypes):
             raise MyException("resource illegal type", "type error")
-        if (type=="track"):
+        if (type=="audio"):
+            name = BPConfig.g_bgmusic_resourceName
+        elif (type=="track"):
             if (actionID is None):
                 name = self._resTrackFormat0.format(levelConfigDict['name'])
             else:
@@ -83,9 +85,16 @@ class CBlueprintBase():
         pass
 
     def check_elements(self):
-        bgmusicName = "##bgmusic"
+        bgmusicName = self.getResource("audio", None)
         if (self._resource.get(bgmusicName, None) is None):
             warnings.warn("似乎没有设置背景音乐吧")
+        else:
+            elementDict = dict()
+            elementDict['name'] = "BP_music"
+            elementDict['source'] = "designer"
+            elementDict['type'] = 'audio'
+            elementDict['value'] = self.getResource("audio", None)
+            self._elements.append(elementDict)
 
         elementNames = []
         for i, elementDict in enumerate(self._elements):
@@ -192,10 +201,7 @@ class CBlueprintBase():
             print("error blueprint_2_video : ", str(ex))
             return 'err'
         else:
-
-            print(type(data))
-
-
+            # print(type(data))
             conn.close()
         return 'ok'
 
@@ -292,7 +298,7 @@ class CSample(CBlueprintBase):
         return
 
     def fill_resource(self):
-        self._resource['##bgmusic'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/duopai/jiezoubg.mp3"
+        self._resource[BPConfig.g_bgmusic_resourceName] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/duopai/jiezoubg.mp3"
         self._resource['##ELEMENT-effect-video'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_4.mp4"
         self._resource['##TRACK-effect'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/duopai/track/t1.txt"
         self._resource['##ALPHA-effect-video'] = 'https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/shanshui3/juanzhou_alpha_hei.mp4'
