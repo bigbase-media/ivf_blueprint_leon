@@ -69,11 +69,15 @@ class CMerger(CBlueprintBase):
             "resizeMode": "pointalign"
         }
 
-        transitionList = []
-        for i in range(len(self._userInputs)-1):
-            transitionDict = transition.create("random", self._actionNameFormat.format(configDict['name'], i+1, times[i+1][0], times[i+1][1]))
-            transitionList.append(transitionDict)
-        transitionList.append(None)
+
+        if (self._transitionFlag!=0):
+            transitionList = []
+            for i in range(len(self._userInputs)-1):
+                transitionDict = transition.create("random", self._actionNameFormat.format(configDict['name'], i+1, times[i+1][0], times[i+1][1]))
+                transitionList.append(transitionDict)
+            transitionList.append(None)
+        else:
+            transitionList = None
         # exit(0)
 
         level = self.create_level_from_action(baseActionDict, configDict, times, element=configDict['elementNames'], transition=transitionList)

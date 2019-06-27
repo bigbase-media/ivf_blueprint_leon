@@ -171,6 +171,8 @@ class CBlueprintBase():
             actionTmpDict['name'] = self._actionNameFormat.format(configDict['name'], i, startTime, endTime)
             for key in kwargs:
                 values = kwargs[key]
+                if (values is None):
+                    continue
                 if (key in action.g_level_keyname_copy_lst):
                     if (values[i] is not None):
                         actionTmpDict[key] = values[i]
