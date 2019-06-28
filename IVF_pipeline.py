@@ -1,12 +1,24 @@
 # -*- coding: utf-8 -*-
 
-from generalBP import *
+from generalBP import BPDarkCorner, BPEffect, BPFilter, BPInverseColor, BPjiugongge, BPMirror, BPMove, BPPolygon
+from generalBP import BPReflect, BPRipple, BPScale, BPshake
 import BPThread, blueprintBase
+from xyl_leon.LYBF_scroll import CLYBF_Scroll
 
 g_effect_dict = {
     "DarkCorner" : BPDarkCorner.CBPDarkCorner,
     "Rotate" : BPEffect.CBPEffectRotate,
-    "Filter" : BPFilter.CBPFilter
+    "Filter" : BPFilter.CBPFilter,
+    "scroll" : CLYBF_Scroll,
+    "InverseColor" : BPInverseColor.CBPInverseColor,
+    "jiugongge" : BPjiugongge.CBPJiuGongGe,
+    "Mirror" : BPMirror.CBPMirror,
+    "Move" : BPMove.CBPMove,
+    "Polygon" : BPPolygon.CBPPolygon,
+    "Reflect" : BPReflect.CBPReflect,
+    "Ripple" : BPRipple.CBPRipple,
+    "Scale" : BPScale.CBPScale,
+    "Shake" : BPshake.CBPShake
 }
 
 
@@ -34,9 +46,9 @@ def IVF_pipeline_asyn_join(t):
 
 ####   TEST PROGRAM
 def test():
-    inputElement = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_hp_4.mp4"
+    inputElement = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_6.mp4"
     duration = 3000
-    effect_list = ['DarkCorner', 'Filter']
+    effect_list = ['Shake']
     effectConfig = dict()
     outputVideo = IVF_pipeline(inputElement, duration, effect_list, effectConfig)
     print(outputVideo)

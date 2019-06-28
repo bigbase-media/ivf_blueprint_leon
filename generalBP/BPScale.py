@@ -6,19 +6,16 @@ sys.path.append("../")
 from blueprintBase import CBlueprintBase, make_Video
 import outputDesc
 
-class BPScale(CBlueprintBase):
+class CBPScale(CBlueprintBase):
 
     # input: https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/vSCALEideo/mv_7.mp4
     # output: http://test-v.oss-cn-shanghai.aliyuncs.com/hypnos-blueprint/output-10565-680188.mp4
-    def __init__(self, user_element, width=720, height=1280, element_duration=None, action_configDict=None,
-                 element_configDict=None):
-        super(BPScale, self).__init__("scale")
-        self._width = width
-        self._height = height
+    def __init__(self, user_element, videoDuration, configDict=dict()):
+        super(CBPScale, self).__init__("Scale")
+        self._width = configDict.get('width', 720)
+        self._height = configDict.get('height', 1280)
         self._user_element = user_element
-        self._action_configDict = action_configDict
-        self._element_configDict = element_configDict
-        self._element_duration = element_duration if element_duration else 3000
+        self._element_duration = videoDuration
         self._element_type = self.get_elementType_fromValue(user_element)
 
     def init_outputDesc(self):
@@ -57,8 +54,6 @@ class BPScale(CBlueprintBase):
             "subactions": ["scale"],
             "scaleConfig": {"startScale": "1.0", "endScale": "0.5"}
         }
-        if self._action_configDict:
-            baseActionDict.update(self._action_configDict)
         kwargs = {
             'element': configDict['elementNames']
         }
@@ -68,10 +63,6 @@ class BPScale(CBlueprintBase):
 
     def newelement_Func(self, configDict):
         names = configDict['elementNames']
-        video_prop = {
-            "startTime": 0,
-            "endTime": self._element_duration
-        }
         for i, name in enumerate(names):
             element = {
                 'name': name,
@@ -79,18 +70,13 @@ class BPScale(CBlueprintBase):
                 'type': self._element_type,
                 'value': self._user_element
             }
-            if self._element_configDict:
-                element.update(self._element_configDict)
-            if self._element_type == "video":
-                element.update(video_prop)
             self._elements.append(element)
-
 
 
 def test_effect():
     userVideo = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_7.mp4"
     videoDuration = 5000
-    rotateVideo = make_Video(BPScale, userVideo, element_duration=videoDuration)
+    rotateVideo = make_Video(CBPScale, userVideo, videoDuration)
     print(rotateVideo)
 
 

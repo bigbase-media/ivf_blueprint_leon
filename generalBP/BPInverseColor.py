@@ -7,24 +7,21 @@ from blueprintBase import CBlueprintBase, make_Video
 import outputDesc
 
 
-class BPInverseColor(CBlueprintBase):
+class CBPInverseColor(CBlueprintBase):
 
     # input: https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_7.mp4
     # output: http://test-v.oss-cn-shanghai.aliyuncs.com/hypnos-blueprint/output-8619-449919.mp4
-    def __init__(self, user_element, width=720, height=1280, elemnet_duration=None, action_configDict=None,
-                 element_configDict=None):
-        super(BPInverseColor, self).__init__("InverseColor")
-        self._width = width
-        self._height = height
-        self._user_element = user_element
-        self._elemnet_duration = elemnet_duration if elemnet_duration else 3000
-        self._action_configDict = action_configDict
-        self._element_configDict = element_configDict
-        self._element_type = self.get_elementType_fromValue(user_element)
+    def __init__(self, userVideo, videoDuration, configDict=dict()):
+        super(CBPInverseColor, self).__init__("InverseColor")
+        self._width = configDict.get('width', 720)
+        self._height = configDict.get('height', 1280)
+        self._user_element = userVideo
+        self._elemnet_duration = videoDuration
+        self._element_type = self.get_elementType_fromValue(userVideo)
 
     def init_outputDesc(self):
         outputLocation = "*"
-        outputAlphaLocation = ".avi"
+        outputAlphaLocation = "*"
         fps = 25.0
         duration = self._elemnet_duration
         bgColor = "RGBA(0,0,0,255)"
@@ -57,18 +54,11 @@ class BPInverseColor(CBlueprintBase):
         kwargs = {
             'element': configDict['elementNames']
         }
-        if self._action_configDict:
-            baseActionDict.update(self._action_configDict)
-
         level = self.create_level_from_action(baseActionDict, configDict, times, **kwargs)
         return level
 
     def newelement_Func(self, configDict):
         names = configDict['elementNames']
-        video_prop = {
-            "startTime": 0,
-            "endTime": self._elemnet_duration
-        }
         for i, name in enumerate(names):
             element = {
                 'name': name,
@@ -76,10 +66,6 @@ class BPInverseColor(CBlueprintBase):
                 'type': self._element_type,
                 'value': self._user_element
             }
-            if self._element_configDict:
-                element.update(self._element_configDict)
-            if self._element_type == "video":
-                element.update(video_prop)
             self._elements.append(element)
 
 
@@ -87,7 +73,7 @@ def test_effect():
     userVideo = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_7.mp4"
     videoDuration = 5000
 
-    rotateVideo = make_Video(BPInverseColor, userVideo, elemnet_duration=videoDuration)
+    rotateVideo = make_Video(CBPInverseColor, userVideo, videoDuration)
     print(rotateVideo)
 
 

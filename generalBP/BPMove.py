@@ -6,12 +6,12 @@ sys.path.append("../")
 from blueprintBase import CBlueprintBase, make_Video
 import outputDesc
 
-class CBPRipple(CBlueprintBase):
+class CBPMove(CBlueprintBase):
 
     # input: https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_7.mp4
-    # output: http://test-v.oss-cn-shanghai.aliyuncs.com/hypnos-blueprint/output-8575-445903.mp4
-    def __init__(self, user_element, videoDuration, configDict=dict()):
-        super(CBPRipple, self).__init__("Ripple")
+    # output: http://test-v.oss-cn-shanghai.aliyuncs.com/hypnos-blueprint/output-8535-468735.mp4
+    def __init__(self, user_element, videoDuration,  configDict=dict()):
+        super(CBPMove, self).__init__("Move")
         self._width = configDict.get('width', 720)
         self._height = configDict.get('height', 1280)
         self._user_element = user_element
@@ -29,7 +29,7 @@ class CBPRipple(CBlueprintBase):
     def init_level(self):
         configDict = dict()
         configDict['id'] = 0
-        configDict['name'] = "ripple"
+        configDict['name'] = "move"
         configDict['actionNumber'] = 1
         configDict['elementNames'] = [self._elementNameFormat.format(configDict['name'], i) for i in
                                       range(configDict['actionNumber'])]
@@ -47,12 +47,15 @@ class CBPRipple(CBlueprintBase):
             "startTime": times[0][0],
             "endTime": times[0][1],
             "projectionType": "normal",
-            "subactions": ["ripple"],
-            "rippleConfig": {"center": "0.5, 0.5"},
+            "resizeMode": "pointalign",
+            "alignPoint": "0.5,0.5",
+            "startPos": "-0.3,-0.3,0.7,0.7",
+            "endPos": "0.3,0.3,1.3,1.3"
         }
         kwargs = {
             'element': configDict['elementNames']
         }
+
         level = self.create_level_from_action(baseActionDict, configDict, times, **kwargs)
         return level
 
@@ -71,9 +74,9 @@ class CBPRipple(CBlueprintBase):
 
 def test_effect():
     userVideo = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_7.mp4"
-    videoDuration = 5000
+    videoDuration = 3000
 
-    rotateVideo = make_Video(CBPRipple, userVideo, videoDuration)
+    rotateVideo = make_Video(CBPMove, userVideo, videoDuration)
     print(rotateVideo)
 
 

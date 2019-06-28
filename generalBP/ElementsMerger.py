@@ -17,6 +17,7 @@ class CMerger(CBlueprintBase):
             self._configDict = dict()
         self._bgmusic = self._configDict.get("bgmusic", None)
         self._bgPic = self._configDict.get("bgPic", None)
+        self._userAlpha = self._configDict.get("userAlpha", None)
         self._transitionFlag = self._configDict.get("Merger_transitionFlag", 0)
         self._effectList = self._configDict.get("Merger_effects", [])
 
@@ -66,6 +67,7 @@ class CMerger(CBlueprintBase):
         if (self._bgmusic is not None):
             self._resource[
                 BPConfig.g_bgmusic_resourceName] = self._bgmusic
+        self._resource["##ALPHA-userVideo-video"] = self._userAlpha
         return
 
     def newLevel_userVideo_Func(self, configDict):
@@ -105,6 +107,10 @@ class CMerger(CBlueprintBase):
             print(self._userInputs[i])
             elementDict['type'] = self.get_elementType_fromValue(self._userInputs[i])
             elementDict['value'] = self._userInputs[i]
+            if (self._userAlpha is not None):
+                visionDict = dict()
+                visionDict['alpha'] = self.getResource("alpha", configDict, subType=self.get_elementType_fromValue(self._userAlpha))
+                elementDict['vision'] = visionDict
             self._elements.append(elementDict)
         return
 
@@ -143,7 +149,7 @@ class CMerger(CBlueprintBase):
             elementDict['name'] = name
             elementDict['source'] = "user"
             elementDict['type'] = self.get_elementType_fromValue(self._bgPic)
-            elementDict['value'] = self._userInputs[i]
+            elementDict['value'] = self._bgPic
             self._elements.append(elementDict)
         return
 
@@ -153,7 +159,8 @@ def mergeElements(userInputs, sliceDuration, bgPic=None):
     configDict['bgmusic'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/dior/diorCopy.aac"
     #"https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/duopai/jiezoubg.mp3"
     configDict['Merger_transitionFlag'] = 1
-    configDict['Merger_effects'] = ['Filter']
+    configDict['Merger_effects'] = ['Filter', 'scroll']
+    configDict['userAlpha'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/shanshui3/jz_alpha2.mp4"
     merger = CMerger(userInputs, sliceDuration, configDict=configDict)
     bpDict = merger.run()
     print(bpDict)

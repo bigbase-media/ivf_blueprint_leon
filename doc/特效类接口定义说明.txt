@@ -9,3 +9,9 @@
 2. configDict 定义规则：
     a. 通用参数，不用加任何前缀和后缀，直接表示意思，如：width、height 等
     b. 特定特效的参数，则需要加前缀，比如 旋转特效的axis，会定义为： Rotate_axis ，中间用下划线隔开，而特效名取自IVF_pipeline 中的定义
+
+3. 通用参数说明：
+    a. width、height：图像宽高
+    b. bgmusic：背景音乐
+    c. bgPic：背景图片
+    d. userAlpha：修饰用户素材的 Alpha 通道

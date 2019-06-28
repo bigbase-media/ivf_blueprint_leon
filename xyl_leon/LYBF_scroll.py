@@ -8,9 +8,11 @@ import outputDesc
 g_Input = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_4.mp4"
 g_Output = "http://test-v.oss-cn-shanghai.aliyuncs.com/hypnos-blueprint/output-11094-016601.mp4"
 
+# outputAlpha = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/shanshui3/jz_alpha2.mp4"
+
 class CLYBF_Scroll(CBlueprintBase):
-    def __init__(self, userVideo, videoDuration):
-        super(CLYBF_Scroll, self).__init__("lybf-scroll")
+    def __init__(self, userVideo, videoDuration, configDict=dict()):
+        super(CLYBF_Scroll, self).__init__("scroll")
         self._userVideo = userVideo
         self._videoDuration = videoDuration
 
@@ -18,7 +20,7 @@ class CLYBF_Scroll(CBlueprintBase):
         width = 720
         height = 1280
         outputLocation = "*"
-        outputAlphaLocation = ".avi"
+        outputAlphaLocation = "*"
         fps = 25.0
         duration = self._videoDuration
         bgColor = "RGBA(0,0,0,255)"
