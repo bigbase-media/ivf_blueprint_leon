@@ -78,7 +78,8 @@ class CMerger(CBlueprintBase):
         if (self._bgmusic is not None):
             self._resource[
                 BPConfig.g_bgmusic_resourceName] = self._bgmusic
-        self._resource["##ALPHA-userVideo-video"] = self._userAlpha
+        if (self._userAlpha is not None):
+            self._resource["##ALPHA-userVideo-video"] = self._userAlpha
         return
 
     def newLevel_userVideo_Func(self, configDict):
@@ -172,8 +173,8 @@ def mergeElements(userInputs, sliceDuration, bgPic=None, durations=None):
     configDict['bgmusic'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/dior/diorCopy.aac"
     #"https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/duopai/jiezoubg.mp3"
     configDict['Merger_transitionFlag'] = 1
-    configDict['Merger_effects'] = ['Filter', 'scroll']
-    configDict['userAlpha'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/shanshui3/jz_alpha2.mp4"
+    configDict['Merger_effects'] = ['Filter', 'Reflect']
+    # configDict['userAlpha'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/shanshui3/jz_alpha2.mp4"
     configDict['durations'] = durations
     merger = CMerger(userInputs, sliceDuration, configDict=configDict)
     bpDict = merger.run()
