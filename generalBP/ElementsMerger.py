@@ -20,14 +20,22 @@ class CMerger(CBlueprintBase):
         self._userAlpha = self._configDict.get("userAlpha", None)
         self._transitionFlag = self._configDict.get("Merger_transitionFlag", 0)
         self._effectList = self._configDict.get("Merger_effects", [])
+        if (self._sliceDuration<=0):
+            self._durations = self._configDict['durations']
+        else:
+            self._durations = [self._sliceDuration for i in range(len(self._userInputs))]
 
     def preprocess_userInput(self):
         print(sys._getframe().f_code.co_name)
         if (len(self._effectList)==0):
             return
         threads = []
-        for input in self._userInputs:
-            t = IVF_pipeline.IVF_pipeline_asyn(input, self._sliceDuration, self._effectList, dict())
+        for i, input in enumerate(self._userInputs):
+            if (self._sliceDuration<=0):
+                duration = self._durations[i]
+            else:
+                duration = self._sliceDuration
+            t = IVF_pipeline.IVF_pipeline_asyn(input, duration, self._effectList, dict())
             threads.append(t)
         self._userInputs = []
         for t in threads:
@@ -40,7 +48,10 @@ class CMerger(CBlueprintBase):
         outputLocation = "*"
         outputAlphaLocation = "*"
         fps = 25.0
-        duration = self._sliceDuration * len(self._userInputs)
+        if (self._sliceDuration<=0):
+            duration = sum(self._durations)
+        else:
+            duration = self._sliceDuration * len(self._userInputs)
         bgColor = "RGBA(0,0,0,255)"
         self._outputDesc = outputDesc.create(width, height, outputLocation, outputAlphaLocation, fps, duration, bgColor)
 
@@ -72,7 +83,8 @@ class CMerger(CBlueprintBase):
 
     def newLevel_userVideo_Func(self, configDict):
         levelName = configDict['name']
-        times = [(i*self._sliceDuration, (i+1)*self._sliceDuration) for i in range(len(self._userInputs))]
+        # times = [(i*self._sliceDuration, (i+1)*self._sliceDuration) for i in range(len(self._userInputs))]
+        times = [(sum(self._durations[0:i]), sum(self._durations[0:i+1])) for i in range(len(self._durations))]
         baseActionDict = {
             "name": levelName,
             "element": configDict['elementNames'],
@@ -128,7 +140,8 @@ class CMerger(CBlueprintBase):
 
     def newLevel_bgPic_Func(self, configDict):
         levelName = configDict['name']
-        times = [(0, self._sliceDuration*len(self._userInputs))]
+        # times = [(0, self._sliceDuration*len(self._userInputs))]
+        times = [(0, sum(self._durations))]
         baseActionDict = {
             "name": levelName,
             "element": configDict['elementNames'],
@@ -153,7 +166,7 @@ class CMerger(CBlueprintBase):
             self._elements.append(elementDict)
         return
 
-def mergeElements(userInputs, sliceDuration, bgPic=None):
+def mergeElements(userInputs, sliceDuration, bgPic=None, durations=None):
     configDict = dict()
     configDict['bgPic'] = bgPic
     configDict['bgmusic'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/dior/diorCopy.aac"
@@ -161,6 +174,7 @@ def mergeElements(userInputs, sliceDuration, bgPic=None):
     configDict['Merger_transitionFlag'] = 1
     configDict['Merger_effects'] = ['Filter', 'scroll']
     configDict['userAlpha'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/shanshui3/jz_alpha2.mp4"
+    configDict['durations'] = durations
     merger = CMerger(userInputs, sliceDuration, configDict=configDict)
     bpDict = merger.run()
     print(bpDict)
@@ -175,7 +189,7 @@ def test():
                   # "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_7.mp4",
                   "http://test-v.oss-cn-shanghai.aliyuncs.com/dd.jpg",
                   "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_8.mp4"]
-    output = mergeElements(userInputs, 4000, bgPic=bgPic)
+    output = mergeElements(userInputs, 0, bgPic=bgPic, durations=[2000, 3000, 4000, 5000])
 
 if __name__=="__main__":
     test()
