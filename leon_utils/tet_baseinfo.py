@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import platform, subprocess, json, os
-import vc_tools, t_log
+import vc_tools
 
 codec_name_image_list = ['jpg', 'jpeg', 'bmp', 'tif', 'png', 'gif', 'tga', 'ico', 'mjpeg']
 
@@ -101,8 +101,8 @@ def get(localvideo):
                 audioinfo['channels'] = stream['channels']
                 baseinfo['audio'] = audioinfo
     except Exception as e:
-        t_log.log("err: tet_baseinfo get fail")
-        t_log.log("except err : %s" % str(e))
+        print("err: tet_baseinfo get fail")
+        print("except err : %s" % str(e))
         return None
     else:
         return baseinfo
