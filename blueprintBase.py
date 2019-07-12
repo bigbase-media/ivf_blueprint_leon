@@ -231,19 +231,22 @@ class CBlueprintBase():
         else:
             raise Exception("不支持的文件类型")
 
-def make_Video(BPClass, *args, **kwargs):
+def make_Video(EffectClass, *args, **kwargs):
     print("args : ", args)
-    baseUElement = BPClass(*args, **kwargs)
-    bpDict = baseUElement.run()
-    print(bpDict)
-    baseUElement.blueprint_2_video()
+    baseUElement = EffectClass(*args, **kwargs)
+    if (isinstance(baseUElement, CBlueprintBase)):
+        bpDict = baseUElement.run()
+        print(bpDict)
+        baseUElement.blueprint_2_video()
+    else:
+        baseUElement.run()
     outputDict = dict()
     outputDict['outputVideo'] = baseUElement._outputVideo
     outputDict['outputAlpha'] = baseUElement._outputAlpha
     return outputDict
 
-def make_Video_asyn(BPClass, *args):
-    t = BPThread.BPThread(make_Video, BPClass, *args)
+def make_Video_asyn(EffectClass, *args):
+    t = BPThread.BPThread(make_Video, EffectClass, *args)
     t.setDaemon(True)
     t.start()
     return t

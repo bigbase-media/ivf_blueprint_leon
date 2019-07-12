@@ -10,3 +10,8 @@ https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_hp_1.mp4
 https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_hp_2.mp4
 https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_hp_3.mp4
 https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_hp_4.mp4
+
+https://cgptest.oss-cn-shanghai.aliyuncs.com/meise/1.jpg
+https://cgptest.oss-cn-shanghai.aliyuncs.com/meise/2.jpg
+https://cgptest.oss-cn-shanghai.aliyuncs.com/meise/3.jpg
+https://cgptest.oss-cn-shanghai.aliyuncs.com/meise/4.jpg

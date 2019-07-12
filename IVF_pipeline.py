@@ -2,6 +2,7 @@
 
 from generalBP import BPDarkCorner, BPEffect, BPFilter, BPInverseColor, BPjiugongge, BPMirror, BPMove, BPPolygon
 from generalBP import BPReflect, BPRipple, BPScale, BPshake
+from AEEffect import AEScroll
 import BPThread, blueprintBase
 from xyl_leon.LYBF_scroll import CLYBF_Scroll
 
@@ -18,7 +19,8 @@ g_effect_dict = {
     "Reflect" : BPReflect.CBPReflect,
     "Ripple" : BPRipple.CBPRipple,
     "Scale" : BPScale.CBPScale,
-    "Shake" : BPshake.CBPShake
+    "Shake" : BPshake.CBPShake,
+    "AEScroll" : AEScroll.CAEScroll
 }
 
 
@@ -46,9 +48,10 @@ def IVF_pipeline_asyn_join(t):
 
 ####   TEST PROGRAM
 def test():
-    inputElement = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_6.mp4"
+    # inputElement = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_6.mp4"
+    inputElement = "https://cgptest.oss-cn-shanghai.aliyuncs.com/meise/3.jpg"
     duration = 3000
-    effect_list = ['Shake']
+    effect_list = ['AEScroll', "DarkCorner", "Mirror"]
     effectConfig = dict()
     outputVideo = IVF_pipeline(inputElement, duration, effect_list, effectConfig)
     print(outputVideo)

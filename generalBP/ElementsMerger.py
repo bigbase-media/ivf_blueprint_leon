@@ -173,7 +173,7 @@ def mergeElements(userInputs, sliceDuration, bgPic=None, durations=None):
     configDict['bgmusic'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/dior/diorCopy.aac"
     #"https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/duopai/jiezoubg.mp3"
     configDict['Merger_transitionFlag'] = 1
-    configDict['Merger_effects'] = ['Filter', 'Reflect']
+    configDict['Merger_effects'] = ['Filter', 'Ripple']
     # configDict['userAlpha'] = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/res/shanshui3/jz_alpha2.mp4"
     configDict['durations'] = durations
     merger = CMerger(userInputs, sliceDuration, configDict=configDict)
@@ -185,10 +185,10 @@ def mergeElements(userInputs, sliceDuration, bgPic=None, durations=None):
 
 def test():
     bgPic = "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_2.mp4"
-    userInputs = ["https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_5.mp4",
+    userInputs = ["https://cgptest.oss-cn-shanghai.aliyuncs.com/meise/1.jpg",
                   "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_6.mp4",
                   # "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_7.mp4",
-                  "http://test-v.oss-cn-shanghai.aliyuncs.com/dd.jpg",
+                  "https://cgptest.oss-cn-shanghai.aliyuncs.com/meise/2.jpg",
                   "https://videofactory.oss-cn-shanghai.aliyuncs.com/ios/video/mv_8.mp4"]
     output = mergeElements(userInputs, 0, bgPic=bgPic, durations=[2000, 3000, 4000, 5000])
 

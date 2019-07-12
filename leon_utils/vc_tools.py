@@ -32,28 +32,6 @@ def send_msg_to_oa(name_list, msg):
 
     return 'ok'
 
-# """通过content-length头获取文件大小
-# url - 目标文件URL
-# proxy - 代理
-# """
-def get_file_size(url, proxy=None):
-    opener = urllib2.build_opener()
-    if proxy:
-        if url.lower().startswith('https://'):
-            opener.add_handler(urllib2.ProxyHandler({'https': proxy}))
-        else:
-            opener.add_handler(urllib2.ProxyHandler({'http': proxy}))
-    request = urllib2.Request(url)
-    request.get_method = lambda: 'HEAD'
-    try:
-        response = opener.open(request)
-        response.read()
-    except Exception, e:
-        print '%s %s' % (url, e)
-        return 0
-    else:
-        return dict(response.headers).get('content-length', 0)
-
 def get_localip_str():
     import socket;
     return str([(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close()) for s in
